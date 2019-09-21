@@ -1,3 +1,4 @@
+
 const path = require("path");
 
 //  导入提取样式的webpack插件
@@ -9,6 +10,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 // 导入清除插件
 const {CleanWebpackPlugin}= require('clean-webpack-plugin');
 
+// 引入vue-loader插件
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // webpack的配置
 module.exports = {
@@ -18,8 +21,8 @@ module.exports = {
 
     // 多个文件入口
     entry: {
-    index: "./src/index.js",
-    about: "./src/about.js"
+    index: "./src/main.js",
+    // about: "./src/about.js"
     },
 
     // 输出配置
@@ -43,7 +46,7 @@ module.exports = {
             {
                 test: /\.css$/, // 匹配.css结尾的文件
                 use: ExtractTextPlugin.extract({	// 提取css
-                    fallback: "style-loader",
+                    fallback: "vue-style-loader",
                     use: ["css-loader"]
                 })
             },
@@ -51,7 +54,7 @@ module.exports = {
             {
                 test: /\.less$/, // 匹配.less结尾的文件
                 use: ExtractTextPlugin.extract({	// 提取css
-                    fallback: "style-loader",
+                    fallback: "vue-style-loader",
                     use: ["css-loader", "less-loader"]
                 })
             },
@@ -68,7 +71,13 @@ module.exports = {
                         }
                     } 
                 ]
-            }
+            },
+
+            // 导入vue
+            {
+                test: /\.vue$/,
+                use: ['vue-loader']
+			},
         ]
     },
 
@@ -79,7 +88,11 @@ module.exports = {
 
         new HtmlWebpackPlugin({
             template: "public/index.html"	// template指定默认html模板
-        })
+        }),
+
+        // vue加载器插件
+        new VueLoaderPlugin(),
+
     ]
 
 }
