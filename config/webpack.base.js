@@ -39,6 +39,16 @@ module.exports = {
         }
     },
 
+    resolve: {
+        alias: {
+            // 1.以后@符号就是src目录
+            '@': path.resolve(__dirname, "../src"),
+            
+        },
+        // 2.省略导入模块时的后缀名。extensions（扩展，延长）
+        extensions: ['.js', '.json', '.vue']
+    },
+
      // 模块加载配置
     module: {
         rules: [
