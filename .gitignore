@@ -1,1 +1,5 @@
-node_modules/
+#忽略node包
+node_modules
+
+#忽略dist包
+dist
