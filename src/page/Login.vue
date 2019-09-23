@@ -12,7 +12,7 @@
 
     <!-- 用户名密码输入框 -->
     <div class="main">
-      <!-- <div>
+      <!-- <div> 
         <input type="text" />
       </div>
 
@@ -21,9 +21,11 @@
       </div> -->
 
       <!-- 模板标签当中传入数据 -->
-      <AuthInput :value="username"  @inputuse="handleUserName"></AuthInput>
+      <AuthInput type="text" :value="form.username"  @input="handleUserName" placeholder="手机号码" :rules="/^1[0-9]{4,10}$/" err_massage="手机号或密码格式不正确" /></AuthInput>
+
+      <!-- <AuthInput type="password" :value="password"  @input="handleUserName" placeholder="密码"></AuthInput> -->
       
-      <button class="loginbtn">登录</button>
+      <button class="loginbtn" @click="handleSubmit">登录</button>
 
       <span>
         没有账号?
@@ -59,9 +61,14 @@ export default {
     handleUserName(value){
         // 将子组件传过来的当前输入框中的value值赋值给数据中的username
         this.form.username = value
-        // console.log(this.value);
+        // console.log(this.form);
         
     },
+
+    handleSubmit(){
+      console.log(this.form);
+      
+    }
 
 
 

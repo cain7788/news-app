@@ -2,8 +2,16 @@
 <template>
   <!-- 这个文件是处理input输入框的组件 -->
   <div>
-  <input type="text" class="input" placeholder="手机号码" :value="value" @input="handleInput" />
-  <input type="password" class="input" placeholder="密码" :value="value" @inputpwd="handleInput" />
+  <input class="input" 
+        :class="{
+          success:status === 'success',   //当status 状态为 success 的时候添加 success这个样式
+          error:status === 'error'      
+        }"
+        :placeholder="placeholder" 
+        :value="value" 
+        @input="handleInput" 
+  />
+  <!-- <input type="password" class="input" placeholder="密码" :value="value" @input="handleInput" /> -->
     </div>
 </template>
 
@@ -11,22 +19,41 @@
 export default {
 
   // 动态获取到父组件中传递的数据
-  props: ["placeholder", "value", "name", "rule"],
+  props: ["placeholder", "value", "name", "rule","error_message"],
 
-    // data(){
-    //     return {
-    //         list:[]
-    //     }
-    // },
+    data(){
+        return {
+            status:""
+        }
+    },
 //   添加事件
     methods:{
         // 每当用户在input中输入的时候触发,通过事件将数据传递给父组件
         handleInput(event){
-            var obj = {}
+
+          const {value} = event.target   // 将event.target中的value解构出来并且重新赋值
+            // 传递事件和数据给父组件
             this.$emit("input",event.target.value)
-            console.log(event.target.value);
+            // 每当在输入的时候，通过父组件传入的状态信息，覆盖到status当中用于判断输入框的样式.
+            if(this.status){   //首先判断有没有这个状态信息
+              if(this.rule.test(value)){    // 使用父组件传入的rule判定当前value是否符合
+                  // 当符合条件的时候，将status赋值为success
+                  this.status === 'success'
+              } else {    // 否则赋值为error
+                  this.status === 'error'
+              }
+            }
             
         },
+
+        // 当输入框失去焦点的时候触发
+        handleChange(){
+          if(this.err_message && this.status === 'error'){   // 当存在错误信息的时候
+              console.log(this.err_message);
+              
+          }
+          
+        }
 
     }
 };
@@ -46,6 +73,13 @@ export default {
     outline: none;
     font-size: 18px;
     margin-top: 15px;
+  }
+  .success {
+    border-color: rgb(25, 160, 81);
+  }
+
+  .error {
+    border-color: rgb(221, 20, 20);
   }
 
 
