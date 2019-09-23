@@ -47,7 +47,7 @@ import AuthInput from '@/components/AuthInput'
 // 导入按钮组件
 import AuthButton from '@/components/AuthButton'
 // 导入axios 组件
-import axios from 'axios';
+//import axios from 'axios';    在main.js 已经将这个插件挂载到原型上了
 
 export default {
   data(){
@@ -77,7 +77,7 @@ export default {
     // 表单提交
     handleSubmit(){
       // 这里用到的请求方式是axios，下面是固有的属性和方法
-      axios({
+      this.$axios({
         url:"http://localhost:3000/login",
         method:"POST",
         data:this.form
