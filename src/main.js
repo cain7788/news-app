@@ -13,7 +13,9 @@ import axios from "axios";
 
 // 导入页面
 import Login from '@/page/Login.vue'
-// import Register from './page/Register.vue'
+// 添加注册页面
+import Register from '@/page/Register.vue'
+
 
 // 注册模板标签
 Vue.use(VueRouter);
@@ -29,8 +31,8 @@ axios.defaults.baseURL = "http://localhost:3000";
 // 配置路由
 const routes = [
     // 配置页面路由
-    {path:'/login',component:Login,},
-    // {path:'register',component:Register}
+    {path:'/login',component:Login},
+    {path:'/register',component:Register}
 
 ]
 

@@ -34,7 +34,8 @@
 
       <span>
         没有账号?
-        <i>去注册</i> 
+        <!-- <i>去注册</i>  -->
+        <router-link to="/register" class="jump">去注册</router-link>
         </span>
     </div>
   </div>
@@ -137,7 +138,7 @@ export default {
     margin-top: 20px;
     text-align: right;
 
-    i {
+    .jump {
       color: rgb(92, 169, 233)
     }
   }
