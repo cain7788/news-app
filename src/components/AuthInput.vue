@@ -4,12 +4,13 @@
   <div>
   <input class="input" 
         :class="{
-          success:status === 'success',   //当status 状态为 success 的时候添加 success这个样式
-          error:status === 'error'      
-        }"
+          success:this.status === 'success',   //当status 状态为 success 的时候添加 success这个样式
+          error:this.status === 'error'      
+        }" 
         :placeholder="placeholder" 
         :value="value" 
         @input="handleInput" 
+        @change="handleChange"
   />
   <!-- <input type="password" class="input" placeholder="密码" :value="value" @input="handleInput" /> -->
     </div>
@@ -19,7 +20,7 @@
 export default {
 
   // 动态获取到父组件中传递的数据
-  props: ["placeholder", "value", "name", "rule","error_message"],
+  props: ["placeholder", "value", "name", "rule","err_message"],
 
     data(){
         return {
@@ -32,25 +33,30 @@ export default {
         handleInput(event){
 
           const {value} = event.target   // 将event.target中的value解构出来并且重新赋值
+          // console.log(value);
+           
+            
             // 传递事件和数据给父组件
-            this.$emit("input",event.target.value)
+            this.$emit("input",value)
             // 每当在输入的时候，通过父组件传入的状态信息，覆盖到status当中用于判断输入框的样式.
-            if(this.status){   //首先判断有没有这个状态信息
+            if(this.rule){   //首先判断有没有这个rule规则
               if(this.rule.test(value)){    // 使用父组件传入的rule判定当前value是否符合
                   // 当符合条件的时候，将status赋值为success
-                  this.status === 'success'
+                  this.status = "success"
               } else {    // 否则赋值为error
-                  this.status === 'error'
+                  this.status = "error"
               }
             }
+            
+            
             
         },
 
         // 当输入框失去焦点的时候触发
         handleChange(){
           if(this.err_message && this.status === 'error'){   // 当存在错误信息的时候
-              console.log(this.err_message);
-              
+              alert(this.err_message);
+              console.log(this.status);
           }
           
         }
@@ -73,13 +79,17 @@ export default {
     outline: none;
     font-size: 18px;
     margin-top: 15px;
+    border-radius: 15px;
   }
   .success {
-    border-color: rgb(25, 160, 81);
+    border-bottom-color: rgb(64, 224, 131);
+    box-shadow:0px 1px 0px  rgb(64, 224, 131);
+
   }
 
   .error {
-    border-color: rgb(221, 20, 20);
+    border-bottom-color: rgb(221, 20, 20);
+    box-shadow:0px 1px 0px  rgb(221, 20, 20);
   }
 
 

@@ -21,7 +21,10 @@
       </div> -->
 
       <!-- 模板标签当中传入数据 -->
-      <AuthInput type="text" :value="form.username"  @input="handleUserName" placeholder="手机号码" :rules="/^1[0-9]{4,10}$/" err_massage="手机号或密码格式不正确" /></AuthInput>
+      <AuthInput type="text" :value="form.username"  @input="handleUserName" placeholder="手机号码" :rule="/^1[0-9]{4,10}$/" err_message="手机号格式不正确" ></AuthInput>
+
+
+      <AuthInput type="password" v-model="form.password"   placeholder="密码" :rule="/^[0-9a-zA-Z]{3,12}$/" err_message="密码格式不正确" ></AuthInput>
 
       <!-- <AuthInput type="password" :value="password"  @input="handleUserName" placeholder="密码"></AuthInput> -->
       
