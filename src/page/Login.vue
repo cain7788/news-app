@@ -78,11 +78,22 @@ export default {
     handleSubmit(){
       // 这里用到的请求方式是axios，下面是固有的属性和方法
       this.$axios({
-        url:"http://localhost:3000/login",
+        url:"/login",
         method:"POST",
         data:this.form
       }).then(res=>{
+        // 打印res查看返回的数据中，成功的提示是什么
         console.log(res);
+        const {message} = res.data
+        if(message === "登录成功"){
+          
+          this.$notify({
+            type: 'success',
+            message: '登录成功'
+          })
+          // 成功后跳转到首页
+          this.$router.push("/")
+        }
         
       })
       

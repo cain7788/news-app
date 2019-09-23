@@ -12,7 +12,7 @@ import Vant from 'vant'    // 这个组件会将所有的方法都加载到proto
 import axios from "axios";
 
 // 导入页面
-import Login from './page/Login.vue'
+import Login from '@/page/Login.vue'
 // import Register from './page/Register.vue'
 
 // 注册模板标签
@@ -20,7 +20,10 @@ Vue.use(VueRouter);
 Vue.use(Vant);
 
 // 把axios挂载到原型
-Vue.prototype.$axios = axios; // this.$axios   挂载之后再全局都可以使用this.$axios 调用请求
+Vue.prototype.$axios = axios; // this.$axios   挂载到Vue的原型上后，可以使用this.$axios 调用请求
+
+// 基准路径，以后每次请求都会自动在前面加上该路径
+axios.defaults.baseURL = "http://localhost:3000";
 
 
 // 配置路由
