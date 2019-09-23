@@ -35,6 +35,8 @@ export default {
 
 // 导入字体图标，使用原生import方法导入网上链接地址
 @import url('http://at.alicdn.com/t/font_1426139_h6vn3jbl5q.css');
+// @import url('./node_modules/vant/lib/index.css');
+@import url("../node_modules/vant/lib/index.css");
 
     * {
         margin: 0;

@@ -28,7 +28,9 @@
 
       <!-- <AuthInput type="password" :value="password"  @input="handleUserName" placeholder="密码"></AuthInput> -->
       
-      <button class="loginbtn" @click="handleSubmit">登录</button>
+      <!-- <button class="loginbtn" @click="handleSubmit">登录</button> -->
+
+      <AuthButton text="登录" @click="handleSubmit"></AuthButton>
 
       <span>
         没有账号?
@@ -42,6 +44,10 @@
 <script>
 // 导入input组件文件
 import AuthInput from '@/components/AuthInput'
+// 导入按钮组件
+import AuthButton from '@/components/AuthButton'
+// 导入axios 组件
+import axios from 'axios';
 
 export default {
   data(){
@@ -55,7 +61,8 @@ export default {
 
   // 导入框架组件
   components:{
-    AuthInput
+    AuthInput,
+    AuthButton
   },
 
 
@@ -67,9 +74,17 @@ export default {
         // console.log(this.form);
         
     },
-
+    // 表单提交
     handleSubmit(){
-      console.log(this.form);
+      // 这里用到的请求方式是axios，下面是固有的属性和方法
+      axios({
+        url:"http://localhost:3000/login",
+        method:"POST",
+        data:this.form
+      }).then(res=>{
+        console.log(res);
+        
+      })
       
     }
 
@@ -103,18 +118,7 @@ export default {
 }
 
 .main {
-  // 将样式放到AuthInput文件当中了.
-  // input {
-  //   width:100%;
-  //   height: 38 / 360 * 100vw;
-  //   padding:25px;
-  //   box-sizing: border-box;
-  //   background: #fff;
-  //   border:none;
-  //   border-bottom: 1px #666 solid;
-  //   outline: none;
-  //   font-size: 20px;
-  // }
+  
 
   span {
     font-size: 14px;

@@ -11,6 +11,7 @@
         :value="value" 
         @input="handleInput" 
         @change="handleChange"
+        :type="type"
   />
   <!-- <input type="password" class="input" placeholder="密码" :value="value" @input="handleInput" /> -->
     </div>
@@ -20,7 +21,7 @@
 export default {
 
   // 动态获取到父组件中传递的数据
-  props: ["placeholder", "value", "name", "rule","err_message"],
+  props: ["placeholder", "value", "type", "rule","err_message"],
 
     data(){
         return {
@@ -55,8 +56,8 @@ export default {
         // 当输入框失去焦点的时候触发
         handleChange(){
           if(this.err_message && this.status === 'error'){   // 当存在错误信息的时候
-              alert(this.err_message);
-              console.log(this.status);
+              // 调用vant模块的提示窗功能，当错误时显示错误信息
+              this.$toast.fail(this.err_message)
           }
           
         }
