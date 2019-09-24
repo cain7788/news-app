@@ -86,6 +86,14 @@ export default {
     },
     // 表单提交
     handleSubmit() {
+      // console.log(this.form.username);
+      
+      if(this.form.username === "" || this.form.password === "" || this.form.nickname === ""){
+        // console.log(11111);
+        
+         this.$toast.fail("注册信息不完整！")
+         return false
+      }
 
       // 这里用到的请求方式是axios，下面是固有的属性和方法
       this.$axios({

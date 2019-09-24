@@ -54,15 +54,17 @@ export default {
         },
 
         // 当输入框失去焦点的时候触发
-        handleBlur(event){
+        handleBlur(){
           // console.log(event.target.value);
           
-          if(!event.target.value){
-              this.$toast.fail("请完善注册信息哦！")
-          }
-
+          // if(!event.target.value){
+          //     this.$toast.fail("请完善注册信息哦！")
+          // }
+          // console.log(this.err_message);
+          
           if(this.err_message && this.status === 'error'){   // 当存在错误信息的时候
               // 调用vant模块的提示窗功能，当错误时显示错误信息
+              console.log(123);
               this.$toast.fail(this.err_message)
           }
           

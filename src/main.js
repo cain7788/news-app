@@ -81,6 +81,12 @@ axios.interceptors.response.use(res => {
         Toast.fail(message);
     }
 
+    // 添加token判断，当token改变或者过期的时候
+    if(message === "用户信息验证失败"){
+        // 跳转回登录页
+        touter.push('/login')
+    }
+
     // 将截取到的res返回，保证程序正常运行
     return res
 })

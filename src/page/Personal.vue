@@ -18,7 +18,7 @@
 
     <CellBar title="我的收藏" text="文章/视频"></CellBar>
 
-    <CellBar title="退出"></CellBar>
+    <CellBar title="退出" @click="handleLogout"></CellBar>
 
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
     mounted(){
         this.$axios({
             url:"/user/" + localStorage.getItem("user_id"),
-            method:"GET",
+            // method:"GET",
             // 添加头信息
             headers:{
                 Authorization:localStorage.getItem('token')
@@ -81,6 +81,16 @@ export default {
         
     },
 
+
+    methods:{
+        handleLogout(){
+            localStorage.removeItem("token")
+            localStorage.removeItem("user_id")
+
+            // 删除后替换成登录页
+            this.$router.replace('/login')
+        }
+    }
 
 }
 </script>
