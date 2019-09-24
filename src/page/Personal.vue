@@ -6,21 +6,35 @@
         <div class="promain">
             <span class="sex iconfont iconxingbienan"></span>
             沙雕网友<br>
-            <span>2019-9-24</span>
+            <span class="time">2019-9-24</span>
         </div>
         <span class="iconfont iconjiantou1"></span>
     </div>
 
     <!-- 选项栏目 -->
+    <CellBar title="我的关注" text="关注的用户"></CellBar>
 
+    <CellBar title="我的跟帖" text="跟帖/回复"></CellBar>
+
+    <CellBar title="我的收藏" text="文章/视频"></CellBar>
+
+    <CellBar title="退出"></CellBar>
 
   </div>
 </template>
 
 <script>
+import CellBar from '@/components/CellBar'
 
 export default {
 
+    components : {
+        CellBar,
+    },
+
+    methods:{
+
+    }
 }
 </script>
 
@@ -28,7 +42,7 @@ export default {
 
     .pro_wrap {
         height: 100%;
-        background-color: #f2f2f2;
+        // background-color: #f2f2f2;
 
         .profile {
             display: flex;
@@ -51,6 +65,12 @@ export default {
 
                 .sex {
                 color: #75b9eb
+                }
+
+                .time {
+                    padding-left: 5px;
+                    font-size: 15px;
+                    color: #bbb;
                 }
 
             }
