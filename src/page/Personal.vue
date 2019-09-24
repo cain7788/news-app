@@ -2,10 +2,10 @@
   <div class="pro_wrap" >
       <!-- 个人信息栏 -->
     <div class="profile">
-        <img src="../../static/default_img.jpg" alt="">
+        <img :src="profile.head_img" alt="">
         <div class="promain">
             <span class="sex iconfont iconxingbienan"></span>
-            沙雕网友<br>
+            {{profile.nickname}}<br>
             <span class="time">2019-9-24</span>
         </div>
         <span class="iconfont iconjiantou1"></span>
@@ -28,6 +28,14 @@ import CellBar from '@/components/CellBar'
 
 export default {
 
+    data(){
+        return {
+            profile:{
+
+            }
+        }
+    },
+
     components : {
         CellBar,
     },
@@ -43,10 +51,37 @@ export default {
             }
 
         }).then(res=>{
-            console.log(res);
+            // console.log(res);
+            // console.log(this.$axios.defaults.baseURL);
+            // 解构取出得到data
+            const {data} = res.data;
+            // 将data赋值给profile，可以根据this.profile直接拿到用户的其他信息
+            this.profile = data
+            // console.log(this.profile.head_img);
             
+            // 根据this.profile拿到用户的头像信息进行判断
+            // 先判断有没有data，避免登录失败或者新用户登陆的时候报错
+            if(data){
+                // 判断数据当中有没有头像图片
+                if(data.head_img){
+                    // 有的话则拼接路径,基准路径（http://localhost:3000）+ 文件地址
+                    this.profile.head_img =  this.$axios.defaults.baseURL + this.profile.head_img;
+                    // console.log(this.profile.head_img);
+                    
+                } else {                     
+                    // 没有头像的话路径为默认头像的路径
+                    this.profile.head_img = "./static/default_img.jpg"
+                }
+
+                // return this.profile.head_img
+            }
         })
-    }
+
+        
+        
+    },
+
+
 }
 </script>
 
