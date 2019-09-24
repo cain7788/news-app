@@ -13,6 +13,9 @@ const {CleanWebpackPlugin}= require('clean-webpack-plugin');
 // 引入vue-loader插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
+// 引入赋值静态文件夹的插件
+const CopyPlugin = require('copy-webpack-plugin')
+
 // webpack的配置
 module.exports = {
 
@@ -102,6 +105,11 @@ module.exports = {
 
         // vue加载器插件
         new VueLoaderPlugin(),
+
+        // 复制静态文件夹的插件
+        new CopyPlugin([
+            { from: 'static', to: 'static' },
+        ]),
 
     ]
 
