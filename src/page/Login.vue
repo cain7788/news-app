@@ -93,7 +93,7 @@ export default {
             message: '登录成功'
           })
           // 成功后跳转到首页
-          this.$router.push("/")
+          this.$router.push("/personal")
         }
         
       })
