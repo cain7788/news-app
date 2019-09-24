@@ -10,7 +10,7 @@
         :placeholder="placeholder" 
         :value="value" 
         @input="handleInput" 
-        @change="handleChange"
+        @blur="handleBlur"
         :type="type"
   />
   <!-- <input type="password" class="input" placeholder="密码" :value="value" @input="handleInput" /> -->
@@ -32,10 +32,10 @@ export default {
     methods:{
         // 每当用户在input中输入的时候触发,通过事件将数据传递给父组件
         handleInput(event){
-
+          
           const {value} = event.target   // 将event.target中的value解构出来并且重新赋值
           // console.log(value);
-           
+            
             
             // 传递事件和数据给父组件
             this.$emit("input",value)
@@ -54,7 +54,13 @@ export default {
         },
 
         // 当输入框失去焦点的时候触发
-        handleChange(){
+        handleBlur(event){
+          // console.log(event.target.value);
+          
+          if(!event.target.value){
+              this.$toast.fail("请完善注册信息哦！")
+          }
+
           if(this.err_message && this.status === 'error'){   // 当存在错误信息的时候
               // 调用vant模块的提示窗功能，当错误时显示错误信息
               this.$toast.fail(this.err_message)
@@ -68,8 +74,8 @@ export default {
 
 <style scoped lang="less">
  .input {
-    // width:100%;
-    width:354px;
+    width:100%;
+    // width:354px;
     // height: 38 / 360 * 100vw;
     height:30px;
     padding:10px 20px;

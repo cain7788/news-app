@@ -32,8 +32,20 @@ export default {
         CellBar,
     },
 
-    methods:{
+    // 当页面加载的时候发送请求，获取到对应用户的信息数据渲染到页面上。
+    mounted(){
+        this.$axios({
+            url:"/user/" + localStorage.getItem("user_id"),
+            method:"GET",
+            // 添加头信息
+            headers:{
+                Authorization:localStorage.getItem('token')
+            }
 
+        }).then(res=>{
+            console.log(res);
+            
+        })
     }
 }
 </script>
