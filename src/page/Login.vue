@@ -26,10 +26,6 @@
 
       <AuthInput type="password" v-model="form.password"   placeholder="密码" :rule="/^[0-9a-zA-Z]{3,12}$/" err_message="密码格式不正确" ></AuthInput>
 
-      <!-- <AuthInput type="password" :value="password"  @input="handleUserName" placeholder="密码"></AuthInput> -->
-      
-      <!-- <button class="loginbtn" @click="handleSubmit">登录</button> -->
-
       <AuthButton text="登录" @click="handleSubmit"></AuthButton>
 
       <span>

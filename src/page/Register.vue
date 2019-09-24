@@ -86,6 +86,26 @@ export default {
     },
     // 表单提交
     handleSubmit() {
+
+
+      // var rExp1 = /^1[0-9]{4,10}$/;
+      // var rExp2 = /^[0-9a-zA-Z\u4e00-\u9fa5]{2,6}$/
+      // var rExp3 = /^[0-9a-zA-Z]{3,12}$/
+
+    
+      // if(!message.username(rExp1)){
+      //     this.$toast.fail("用户名不正确")
+      //     return
+      // } else if(!message.nickname(rExp2)){
+      //     this.$toast.fail("昵称格式不正确")
+      //     return
+      // }else if(!rExp3(message.password)){
+      //     this.$toast.fail("密码格式不正确")
+      //     return
+      // }
+
+
+
       // 这里用到的请求方式是axios，下面是固有的属性和方法
       this.$axios({
         url: "/register",
@@ -93,8 +113,9 @@ export default {
         data: this.form
       }).then(res => {
         // 打印res查看返回的数据中，成功的提示是什么
-        // console.log(res);
+        console.log(res);
         const { message } = res.data;
+
         if (message === "注册成功") {
           this.$notify({
             type: "success",
@@ -103,6 +124,8 @@ export default {
           // 成功后跳转到首页
           this.$router.push("/login");
         }
+
+        
       });
     }
   }

@@ -63,9 +63,6 @@ axios.interceptors.response.use(res => {
 
 new Vue({
     el:"#app",
-    // data:{
-    //     msg:"hello webpack and vue"
-    // },
     render(createElement){
         return createElement(App)
     },
