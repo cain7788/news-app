@@ -18,6 +18,8 @@ import Login from '@/page/Login.vue'
 import Register from '@/page/Register.vue'
 // 添加个人中心页面
 import Personal from '@/page/Personal.vue'
+// 添加编辑个人信息页面
+import EditData from '@/page/EditData.vue'
 
 
 // 注册模板标签
@@ -37,6 +39,7 @@ const routes = [
     {path:'/login',component:Login},
     {path:'/register',component:Register},
     {path:'/personal',component:Personal},
+    {path:'/editdata',component:EditData},
 
 ]
 
