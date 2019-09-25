@@ -72,37 +72,47 @@ export default {
   },
 
   methods: {
-    //   点击确认输入框事件
-    handleNickname() {
-      //   console.log(value);
-      // 点击确认后应该获取到当前输入框中的值，替换数据库中对应的值
-      // console.log(this.nicknameCache);
-    
 
-      this.$axios({
+    // 封装修改后台数据的请求方法,调用的时候要在前面添加this调用
+    editProfile(data,callback){
+        // 先判断是否存在data，没有的话就不用继续执行了
+        if(!data) return 
+
+        this.$axios({
         url: "/user_update/" + localStorage.getItem("user_id"),
         method: "POST",
         // 添加头信息
         headers: {
           Authorization: localStorage.getItem("token")
         },
-        data: {nickname:this.nicknameCache},
+        data
       }).then(res => {
-        console.log(res);
         const {message} = res.data
         // 当修改成功的时候
         if(message === "修改成功"){
-            console.log(123);
             
-            // 替换当前数据当中的nickname
-            this.profile.nickname = this.nicknameCache
+            // 替换当前数据
+            if(callback){
+                callback()
+            }
+            // this.profile.nickname = this.nicknameCache
             // 将提示弹窗
             this.$toast.success(message)
         }
-
-
-
       });
+    },
+    //   点击确认输入框事件
+    handleNickname() {
+      //   console.log(value);
+      // 点击确认后应该获取到当前输入框中的值，替换数据库中对应的值
+      // console.log(this.nicknameCache);
+    
+      this.editProfile({nickname:this.nicknameCache},()=>{
+          this.profile.nickname = this.nicknameCache
+      })
+
+
+
     }
   }
 };
