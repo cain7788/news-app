@@ -19,7 +19,20 @@
     </van-dialog>
 
     <!-- 编辑性别 -->
-    <CellBar title="性别" :text="profile.gender = 1?'男':'女'"></CellBar>
+    <CellBar title="性别" :text="profile.gender === '1'?'男':'女'" @click="show3 = !show3"></CellBar>
+
+    <van-dialog title="修改性别" v-model="show3" show-cancel-button @confirm="handleGender">
+      <van-radio-group v-model="genderCache">
+        <van-cell-group>
+          <van-cell title="男" clickable @click="genderCache = '1'">
+            <van-radio slot="right-icon" name="1" />
+          </van-cell>
+          <van-cell title="女" clickable @click="genderCache = '0'">
+            <van-radio slot="right-icon" name="0" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </van-dialog>
   </div>
 </template>
 
@@ -64,19 +77,19 @@ export default {
         //   输入框默认值
         this.nicknameCache = this.profile.nickname;
         this.passwordCache = this.profile.password;
-        this.genderCache = this.profile.gender;
-        console.log(this.profile.password);
+        this.genderCache   = String(this.profile.gender);
+        // console.log(data.gender);
 
         // 判断有没有头像
         if (data.head_img) {
-          this.profile.head_img = this.$axios.defaults.baseURL + this.profile.head_img;
+          this.profile.head_img =
+            this.$axios.defaults.baseURL + this.profile.head_img;
           // console.log(this.profile.head_img);
         } else {
           this.profile.head_img = "./static/default_img.jpg";
         }
       }
     });
-
   },
 
   methods: {
@@ -94,8 +107,6 @@ export default {
         },
         data
       }).then(res => {
-        console.log(res);
-
         const { message } = res.data;
         // 当修改成功的时候
         if (message === "修改成功") {
@@ -137,20 +148,20 @@ export default {
 
         // 到现在为止，提交了图片给服务器保存并且返回了路径在页面上渲染，接着我们还要替换掉用户数据中的头像路径
         this.$axios({
-            url:"/user_update/"+ localStorage.getItem("user_id"),
-            method:"POST",
-            headers:{
-                Authorization:localStorage.getItem("token")
-            },
-            // 将当前的图片地址替换掉用户中的头像地址
-            data:{head_img:data.url}
-        }).then(res=>{
-            const {message} = res.data;
+          url: "/user_update/" + localStorage.getItem("user_id"),
+          method: "POST",
+          headers: {
+            Authorization: localStorage.getItem("token")
+          },
+          // 将当前的图片地址替换掉用户中的头像地址
+          data: { head_img: data.url }
+        }).then(res => {
+          const { message } = res.data;
 
-            if(message === "修改成功"){
-                this.$toast.success(message)
-            }
-        })
+          if (message === "修改成功") {
+            this.$toast.success(message);
+          }
+        });
       });
     },
 
@@ -168,7 +179,15 @@ export default {
 
     handlePassword() {
       this.editProfile({ password: this.passwordCache });
-    }
+    },
+
+    // 修改性别
+    handleGender(){
+        
+        this.editProfile({gender:this.genderCache},()=>{
+          this.profile.gender = String(this.genderCache)
+        })
+    },
   }
 };
 </script>

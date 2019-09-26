@@ -83,6 +83,12 @@ export default {
     },
     // 表单提交
     handleSubmit() {
+
+      if(this.form.username === "" || this.form.password === ""){
+        // console.log(123);
+          this.$toast.fail("填写完整的登录信息")
+          return 
+      }
       // 这里用到的请求方式是axios，下面是固有的属性和方法
       this.$axios({
         url: "/login",
