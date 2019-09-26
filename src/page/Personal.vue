@@ -1,6 +1,7 @@
 <template>
   <div class="pro_wrap">
-     <router-link to="/editdata">    <!--点击头部框跳转到编辑页面 -->
+    <router-link to="/editdata">
+      <!--点击头部框跳转到编辑页面 -->
       <!-- 个人信息栏 -->
       <div class="profile">
         <img :src="profile.head_img" alt />
@@ -15,9 +16,14 @@
     </router-link>
 
     <!-- 选项栏目 -->
-    <CellBar title="我的关注" text="关注的用户"></CellBar>
+    <router-link to="/user_follow">
+      <CellBar title="我的关注" text="关注的用户"></CellBar>
+    </router-link>
 
-    <CellBar title="我的跟帖" text="跟帖/回复"></CellBar>
+    <router-link to="/user-comment">
+      <CellBar title="我的跟帖" text="跟帖/回复"></CellBar>
+    </router-link>
+
 
     <CellBar title="我的收藏" text="文章/视频"></CellBar>
 
@@ -104,6 +110,7 @@ export default {
       display: block;
       width: 70 / 360 * 100vw;
       height: 70 / 360 * 100vw;
+      object-fit: cover;
       border-radius: 50%;
     }
 

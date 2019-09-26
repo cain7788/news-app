@@ -20,6 +20,10 @@ import Register from '@/page/Register.vue'
 import Personal from '@/page/Personal.vue'
 // 添加编辑个人信息页面
 import EditData from '@/page/EditData.vue'
+// 添加我的关注页面
+import UserFollow from '@/page/UserFollow.vue'
+// 添加我的跟帖页面
+import UserComment from '@/page/UserComment.vue'
 
 
 // 注册模板标签
@@ -31,6 +35,7 @@ Vue.prototype.$axios = axios; // this.$axios   挂载到Vue的原型上后，可
 
 // 基准路径，以后每次请求都会自动在前面加上该路径
 axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "http://172.20.10.2:3000";
 
 
 // 配置路由
@@ -40,6 +45,8 @@ const routes = [
     {path:'/register',component:Register},
     {path:'/personal',component:Personal},
     {path:'/editdata',component:EditData},
+    {path:'/user_follow',component:UserFollow},
+    {path:'/user-comment',component:UserComment},
 
 ]
 

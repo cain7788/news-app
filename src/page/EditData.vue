@@ -19,7 +19,7 @@
     </van-dialog>
 
     <!-- 编辑性别 -->
-    <CellBar title="性别" :text="profile.gender === '1'?'男':'女'" @click="show3 = !show3"></CellBar>
+    <CellBar title="性别" :text="profile.gender === 1?'男':'女'" @click="show3 = !show3"></CellBar>
 
     <van-dialog title="修改性别" v-model="show3" show-cancel-button @confirm="handleGender">
       <van-radio-group v-model="genderCache">
@@ -75,10 +75,10 @@ export default {
         this.profile = data;
 
         //   输入框默认值
-        this.nicknameCache = this.profile.nickname;
-        this.passwordCache = this.profile.password;
-        this.genderCache   = String(this.profile.gender);
-        // console.log(data.gender);
+        this.nicknameCache = data.nickname;
+        this.passwordCache = data.password;
+        this.genderCache   = String(data.gender);
+        // console.log(this.profile.gender);
 
         // 判断有没有头像
         if (data.head_img) {
@@ -183,9 +183,9 @@ export default {
 
     // 修改性别
     handleGender(){
-        
-        this.editProfile({gender:this.genderCache},()=>{
-          this.profile.gender = String(this.genderCache)
+        const gender = String()
+        this.editProfile({gender:+this.genderCache},()=>{
+          this.profile.gender = +this.genderCache
         })
     },
   }

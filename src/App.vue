@@ -41,6 +41,8 @@ export default {
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
+        background-color: #f6f6f6;
     }
     a {
         // a标签属性的继承
