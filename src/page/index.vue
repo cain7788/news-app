@@ -21,10 +21,11 @@
         
         
         <!-- 调用组件渲染 -->
-        <PostCart>
-
-
+        <!-- 注意当前传递到子组件的数据是:post="item",是每一项 -->
+        <PostCart v-for="(item,index) in posts" :key="index" :post="item" >
         </PostCart>
+
+        
         
 
 
@@ -53,6 +54,7 @@ export default {
       active:localStorage.getItem("token")?1:0,     //判断，当登陆状态的时候，在头条左边显示关注栏目，头条
                                                     // 的id为1，所以active为1.反之没有关注栏目则为0.
       cid:999,
+      posts:[],      //注意,这里的文章列表是每个栏目自己的文章列表.
     }
   },
 
@@ -76,20 +78,36 @@ export default {
         Authorization: localStorage.getItem("token")
       }
     }
-      
+    
+
+    // 请求栏目列表
     this.$axios(config,{
       // url:"/category",
       // headers:{
       //   Authorization: localStorage.getItem("token")
       // }
     }).then(res=>{
-      console.log(res.data);
+      // console.log(res.data);
       const {data} = res.data;
 
       this.categorys = data
 
     })
-  }
+
+    // 请求文章列表
+    this.$axios({
+      url:`/post?category=${this.cid}`,   // 通过es6拼接,获取对应cid栏目中的文章,
+    }).then(res=>{
+      
+      
+      const {data} = res.data;
+      // 将文章列表赋值给post
+      this.posts = data
+      console.log(this.posts);
+      
+    })
+  },
+
 
 }
 </script>
