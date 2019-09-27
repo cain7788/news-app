@@ -68,7 +68,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
 .follow_list {
   display: flex;
   justify-content: space-between;

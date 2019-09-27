@@ -1,33 +1,43 @@
 <template>
-  <div class="pro_wrap">
-    <router-link to="/editdata">
-      <!--点击头部框跳转到编辑页面 -->
-      <!-- 个人信息栏 -->
-      <div class="profile">
-        <img :src="profile.head_img" alt />
-        <div class="promain">
-          <span class="sex iconfont iconxingbienan"></span>
-          {{profile.nickname}}
-          <br />
-          <span class="time">2019-9-24</span>
-        </div>
-        <span class="iconfont iconjiantou1"></span>
+  <div>
+      <div class="person-nav">
+        <router-link to="/">
+        <span>首页</span>
+        </router-link>
       </div>
-    </router-link>
 
-    <!-- 选项栏目 -->
-    <router-link to="/user_follow">
-      <CellBar title="我的关注" text="关注的用户"></CellBar>
-    </router-link>
+    <div class="pro_wrap">
+      <router-link to="/editdata">
+        <!--点击头部框跳转到编辑页面 -->
+        <!-- 个人信息栏 -->
+        <div class="profile">
+          <img :src="profile.head_img" alt />
+          <div class="promain">
+            <span
+              class="iconfont"
+              :class="profile.gender===1?'iconxingbienan blue':'iconxingbienv red'"
+            ></span>
+            {{profile.nickname}}
+            <br />
+            <span class="time">2019-9-24</span>
+          </div>
+          <span class="iconfont iconjiantou1"></span>
+        </div>
+      </router-link>
 
-    <router-link to="/user-comment">
-      <CellBar title="我的跟帖" text="跟帖/回复"></CellBar>
-    </router-link>
+      <!-- 选项栏目 -->
+      <router-link to="/user_follow">
+        <CellBar title="我的关注" text="关注的用户"></CellBar>
+      </router-link>
 
+      <router-link to="/user-comment">
+        <CellBar title="我的跟帖" text="跟帖/回复"></CellBar>
+      </router-link>
 
-    <CellBar title="我的收藏" text="文章/视频"></CellBar>
+      <CellBar title="我的收藏" text="文章/视频"></CellBar>
 
-    <CellBar title="退出" @click="handleLogout"></CellBar>
+      <CellBar title="退出" @click="handleLogout"></CellBar>
+    </div>
   </div>
 </template>
 
@@ -37,7 +47,7 @@ import CellBar from "@/components/CellBar";
 export default {
   data() {
     return {
-      profile: {}
+      profile: []
     };
   },
 
@@ -55,7 +65,7 @@ export default {
         Authorization: localStorage.getItem("token")
       }
     }).then(res => {
-      // console.log(res);
+      console.log(res);
       // console.log(this.$axios.defaults.baseURL);
       // 解构取出得到data
       const { data } = res.data;
@@ -95,6 +105,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.person-nav {
+  width: 100%;
+  // height: 30px;
+  // background-color: #f97979;
+  padding: 5px 20px;
+  border-bottom: 1px solid rgb(211, 211, 211);
+
+  span {
+    padding: 3px 0;
+    text-align: center;
+    display: block;
+    width: 50px;
+    background-color: rgb(170, 170, 170);
+    color: #fff;
+    border-radius: 15px;
+  }
+}
 .pro_wrap {
   height: 100%;
   // background-color: #f2f2f2;
@@ -119,8 +146,15 @@ export default {
       text-align: left;
       padding: 0 10px;
 
-      .sex {
+      // .sex {
+      //   color: #75b9eb;
+      // }
+      .blue {
         color: #75b9eb;
+      }
+
+      .red {
+        color: red;
       }
 
       .time {

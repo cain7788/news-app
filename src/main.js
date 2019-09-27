@@ -26,6 +26,11 @@ import UserFollow from '@/page/UserFollow.vue'
 import UserComment from '@/page/UserComment.vue'
 
 
+// 前台页面
+// 首页
+import Index from '@/page/Index.vue'
+
+
 // 注册模板标签
 Vue.use(VueRouter);
 Vue.use(Vant);
@@ -47,6 +52,7 @@ const routes = [
     {path:'/editdata',component:EditData},
     {path:'/user_follow',component:UserFollow},
     {path:'/user-comment',component:UserComment},
+    {path:'/',component:Index},
 
 ]
 
