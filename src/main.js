@@ -8,7 +8,7 @@ import VueRouter from 'vue-router'
 // 导入vant组件
 import Vant from 'vant'    // 这个组件会将所有的方法都加载到prototype原型当中，由此可以通过this.获取到所有方法和属性
 import {Toast} from 'vant'
-
+    
 // 导入axios
 import axios from "axios";
 
