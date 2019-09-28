@@ -16,19 +16,24 @@
     <!-- 导航栏 -->
     <van-tabs v-model="active" sticky swipeable>
       <van-tab v-for="(item,index) in categorys" :title="item.name" :key="index">
-
         <!-- 渲染文章列表 -->
         <!-- 插入vant的list插件实现加载功能 -->
-        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-
-        <!-- 调用组件渲染 -->
-        <!-- 注意当前传递到子组件的数据是:post="item",是每一项 -->
-        <PostCart v-for="(item,index) in posts" :key="index" :post="item"></PostCart>
-
-
+        <!-- immediate-check 禁止list立即出发onload -->
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+          <!-- 调用组件渲染 -->
+          <!-- 注意当前传递到子组件的数据是:post="item",是每一项 -->
+          <PostCart 
+          v-for="(item,index) in posts" 
+          :key="index" 
+          :post="item"
+          ></PostCart>
         </van-list>
-
-        
       </van-tab>
     </van-tabs>
   </div>
@@ -38,7 +43,7 @@
 import PostCart from "@/components/PostCart";
 export default {
   components: {
-    PostCart,
+    PostCart
   },
   data() {
     return {
@@ -51,10 +56,10 @@ export default {
       loading: false,
       // 默认为false，数据没有加载完成，是否有更多数据，如果加载完所有的数据，改为true
       finished: false,
-      // 设置后台数据：pagesize：显示当前页码、
-      pageSize:1,
+      // 设置后台数据：pageindex：显示当前页码、
+      pageIndex: 1,
       // 设置后台数据：pagesize：设置每页显示的数据条数
-      pageIndex:5,     // 在发送请求的时候将这两个参加传进去，返回的数据就会分好页面。
+      pageSize: 5 // 在发送请求的时候将这两个参加传进去，返回的数据就会分好页面。
     };
   },
 
@@ -65,22 +70,11 @@ export default {
       // 当变更栏目的时候取到对应栏目数据的id赋值给当前的cid。后面根据cid显示对应的内容
       this.cid = this.categorys[this.active].id;
       // console.log(this.cid);
-
-      // 请求文章列表
-    this.$axios({
-      url: `/post?category=${this.cid}` // 通过es6拼接,获取对应cid栏目中的文章,
-    }).then(res => {
-      const { data } = res.data;
-      // 将文章列表赋值给post
-      this.posts = data;
-      console.log(res);
-    });
+      // this.onLoad()
     }
   },
 
   mounted() {
-    // console.log(this.cid);
-    console.log(123);
 
     const config = { url: "/category" };
     // 将验证用户是否登陆的模块提取出来,判断当本地中有token的时候才执行验证,否则不验证
@@ -98,35 +92,59 @@ export default {
       //   Authorization: localStorage.getItem("token")
       // }
     }).then(res => {
-      // console.log(res.data);
       const { data } = res.data;
-
+      // 取到所有栏目的数据
       this.categorys = data;
+      // console.log(this.categorys);
     });
 
     // 请求文章列表
     this.$axios({
-      url: `/post?category=${this.cid}` // 通过es6拼接,获取对应cid栏目中的文章,
+      // 通过es6拼接,获取对应cid栏目中的文章,
+      url: `/post?category=${this.cid}&pageSize=${this.pageSize}&pageIndex=${this.pageIndex}`
     }).then(res => {
       const { data } = res.data;
       // 将文章列表赋值给post
       this.posts = data;
-      console.log(res);
+      
+      // 页数加一
+      this.pageIndex++;
     });
-
-
-
   },
 
-  methods:{
-    onLoad(){
-
+  methods: {
+    // 思路：当滑动到一定位置的时候，触发onload事件，触发后重新请求post数据
+    // 判断数据的长度是否小于pagesize（每页显示数据条数），如果小于，则已经没有数据了
+    // 就提示已经加载完毕，this.finished = true;已经加载完。如果还有数据的话则达到
+    // onload条件继续触发，继续判断。
+    onLoad() {
       // 延时执行加载
-      setTimeout(()=>{
-        this.loading = false;
-        this.finished = true;
-      },5000)
-      
+      setTimeout(() => {
+        this.$axios({
+          // 添加pagesize=5之后，每次取回的res.data都是为5条和前面不同的数据
+          url: `/post?category=${this.cid}&pageSize=${this.pageSize}&pageIndex=${this.pageIndex}`
+        }).then(res => {
+          const { data } = res.data;
+          // console.log(data,this.pageSize,data.length);
+  
+          // 此时判断是否还有数据未加载,data为重新请求回来的第二页数据
+          if(data.length < this.pageSize){
+            
+            // 说明数据已经加载完毕，将finished设置为true
+            this.finished = true;
+          }
+
+          // 将当前取回的数据添加到一个总数据库当中，累加，因为前面的数据还是需要加载显示的
+          this.posts= [...this.posts,...data];
+          // this.posts.create(data)
+  
+          // 此时已经加载新的一页了，pageindex要+1
+          this.pageIndex++;
+
+          // 当前的数据已经加载完毕，应当将loading设置为false，否则会一直加载中
+          this.loading = false;
+        });
+      }, 2000);
     }
   }
 }
