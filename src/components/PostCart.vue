@@ -4,16 +4,20 @@
     <!-- 第一：正常文章（1~2张图片）判断post中的cover数组数量 -->
     <div class="posts" v-if="post.cover.length > 0 && post.cover.length < 3 && post.type === 1">
       <div class="post-content">
+        <router-link :to="`/post_detail/${post.id}`">
         <span>{{post.title}}</span>
+        </router-link>
         <!-- 单图文章cover中只有一项数据,默认取0就可以了 -->
         <div class="post-img">
+          <router-link :to="`/post_detail/${post.id}`">
           <img :src="post.cover[0].url" alt />
+          </router-link>
         </div>
       </div>
       <div class="post-footer">
         <span>{{post.user.nickname}}</span>
         <i>{{post.comment_length}}跟帖</i>
-      </div>
+      </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     </div>
 
     <!-- -------------------------------------------------------------- -->
@@ -52,7 +56,11 @@
 </template>
 
 <script>
+import PostDetail from '@/page/PostDetail'
 export default {
+  components:{
+    PostDetail,
+  },
   props: ["post"],
   // data(){
   //     return {
@@ -60,7 +68,10 @@ export default {
   //     }
   // },
 
-  mounted() {}
+  mounted() {
+    console.log(this.post);
+    
+  }
 };
 </script>
 

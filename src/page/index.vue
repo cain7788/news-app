@@ -10,7 +10,9 @@
           <i>搜索新闻</i>
         </div>
       </router-link>
+      <router-link to="/Personal" class="mypersonal">
       <span class="iconfont iconwode"></span>
+      </router-link>
     </div>
 
     <!-- 导航栏 -->
@@ -80,7 +82,7 @@ export default {
   },
 
   mounted() {
-    console.log(123);
+    // console.log(123);
     
     const config = { url: "/category" };
     // 将验证用户是否登陆的模块提取出来,判断当本地中有token的时候才执行验证,否则不验证
@@ -92,12 +94,7 @@ export default {
     }
 
     // 请求栏目列表
-    this.$axios(config, {
-      // url:"/category",
-      // headers:{
-      //   Authorization: localStorage.getItem("token")
-      // }
-    }).then(res => {
+    this.$axios(config).then(res => {
       const { data } = res.data;
 
       // 取到所有栏目的数据
@@ -117,10 +114,9 @@ export default {
       // 保存栏目列表
       this.categorys = newData
       console.log(this.categorys);
-      
-    });
 
-    // 请求文章列表
+      // 先等栏目数据加载完成之后再请求加载文章数据。
+      // 请求文章列表
     this.$axios({
       // 通过es6拼接,获取对应cid栏目中的文章,
       url: `/post?category=${this.cid}&pageSize=${this.pageSize}&pageIndex=${this.pageIndex}`
@@ -132,6 +128,12 @@ export default {
       // 页数加一
       this.categorys[this.active].pageIndex++;
     });
+
+
+      
+    });
+
+    
   },
 
   methods: {
@@ -169,7 +171,7 @@ export default {
           // 当前的数据已经加载完毕，应当将loading设置为false，否则会一直加载中
           category.loading = false;
         });
-      }, 2000);
+      }, 1000);
     }
   }
 }
@@ -201,8 +203,11 @@ export default {
     border-radius: 15px;
     font-size: 15px;
   }
-  > span {
-    font-size: 20px;
+  .mypersonal {
+    span{
+      font-size: 20px;
+    }
+    
   }
 }
 
