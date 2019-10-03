@@ -5,29 +5,33 @@
     <div class="posts" v-if="post.cover.length > 0 && post.cover.length < 3 && post.type === 1">
       <div class="post-content">
         <router-link :to="`/post_detail/${post.id}`">
-        <span>{{post.title}}</span>
+          <span>{{post.title}}</span>
         </router-link>
         <!-- 单图文章cover中只有一项数据,默认取0就可以了 -->
         <div class="post-img">
           <router-link :to="`/post_detail/${post.id}`">
-          <img :src="post.cover[0].url" alt />
+            <img :src="post.cover[0].url" alt />
           </router-link>
         </div>
       </div>
       <div class="post-footer">
         <span>{{post.user.nickname}}</span>
         <i>{{post.comment_length}}跟帖</i>
-      </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      </div>
     </div>
 
     <!-- -------------------------------------------------------------- -->
     <!-- 第一：多图文章（1~2张图片）判断post中的cover数组数量>=3,但只显示3张 -->
     <div class="posts" v-if="post.cover.length >= 3">
       <div class="post-content addcss">
-        <span>{{post.title}}</span>
-        <div class="postimgs">
-          <img v-for="(item,index) in post.cover" :key="index" :src="item.url" v-if="index < 3" />
-        </div>
+        <router-link :to="`/post_detail/${post.id}`">
+          <span>{{post.title}}</span>
+        </router-link>
+        <router-link :to="`/post_detail/${post.id}`">
+          <div class="postimgs">
+            <img v-for="(item,index) in post.cover" :key="index" :src="item.url" v-if="index < 3" />
+          </div>
+        </router-link>
         <div class="post-footer">
           <span>{{post.user.nickname}}</span>
           <i>{{post.comment_length}}跟帖</i>
@@ -39,13 +43,17 @@
     <!-- 第一：视频文章 判断post中的cover数组数量=1且type === 1 -->
     <div class="posts" v-if="post.cover.length === 1 && post.type === 2">
       <div class="post-content addcss">
+        <router-link :to="`/post_detail/${post.id}`">
         <span>{{post.title}}</span>
+        </router-link>
+        <router-link :to="`/post_detail/${post.id}`">
         <div class="video">
           <img :src="post.cover[0].url" />
           <span class="video-layer">
             <i class="iconfont iconshipin"></i>
           </span>
         </div>
+        </router-link>
         <div class="post-footer">
           <span>{{post.user.nickname}}</span>
           <i>{{post.comment_length}}跟帖</i>
@@ -56,10 +64,10 @@
 </template>
 
 <script>
-import PostDetail from '@/page/PostDetail'
+import PostDetail from "@/page/PostDetail";
 export default {
-  components:{
-    PostDetail,
+  components: {
+    PostDetail
   },
   props: ["post"],
   // data(){
@@ -70,7 +78,6 @@ export default {
 
   mounted() {
     // console.log(this.post);
-    
   }
 };
 </script>

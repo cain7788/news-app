@@ -16,8 +16,7 @@
       <div class="header-content">
         <h3>{{detail.title}}</h3>
         <div class="post-nickname">
-          <i>{{detail.user.nickname}}</i>&nbsp;&nbsp;
-          <span>2019-9-29</span>
+          <p>{{detail.user.nickname}}   2019-9-29</p>
         </div>
       </div>
     </div>
@@ -26,9 +25,9 @@
     <div class="post-content">
       <div v-html="detail.content"></div>
       <div class="post-btn">
-        <div class="like">
-          <i class="iconfont icondianzan"></i>
-          <span>112</span>
+        <div class="like" @click="handleLike" :class="{like_active:detail.has_like}">
+          <i class="iconfont icondianzan" :class="{like_btn:detail.has_like}"></i>
+          <span>{{detail.like_length}}</span>
         </div>
         <div class="wechat">
           <i class="iconfont iconweixin"></i>
@@ -53,73 +52,120 @@ export default {
 
   data() {
     return {
-      detail: {}
+      detail: {
+        user:{}
+      }
     };
   },
 
-  methods:{
+  methods: {
     // 点击取消关注功能按钮
-    handleUnfollow(){
-        const id = this.detail.user.id
-        const config = {
-          url:"/user_unfollow/" + id
+    handleUnfollow() {
+      const id = this.detail.user.id;
+      const config = {
+        url: "/user_unfollow/" + id
+      };
+
+      if (localStorage.getItem("token")) {
+        config.headers = {
+          Authorization: localStorage.getItem("token")
+        };
+      }
+
+      this.$axios(config).then(res => {
+        const { message } = res.data;
+        console.log(message);
+        if (message === "取消关注成功") {
+          // 取消关注成功后要将本地的数据更改为false
+          this.detail.has_follow = false;
+
+          this.$toast.success(message);
         }
-
-        if (localStorage.getItem("token")) {
-          config.headers = {
-            Authorization: localStorage.getItem("token")
-          };
-        } 
-
-
-        this.$axios(config).then(res=>{
-          const {message} = res.data
-          console.log(message);
-          if(message === "取消关注成功"){
-            // 取消关注成功后要将本地的数据更改为false
-              this.detail.has_follow = false
-
-              this.$toast.success(message)
-          }
-        })
+      });
     },
 
-
     // 点击关注功能按钮
-    handleFollow(){
-        const id = this.detail.user.id
-        const config = {
-          url:"/user_follows/" + id
+    handleFollow() {
+      const id = this.detail.user.id;
+      const config = {
+        url: "/user_follows/" + id
+      };
+
+      if (localStorage.getItem("token")) {
+        config.headers = {
+          Authorization: localStorage.getItem("token")
+        };
+      }
+
+      this.$axios(config).then(res => {
+        const { message } = res.data;
+
+        if (message === "已关注" || message === "关注成功") {
+          console.log(message);
+          // 关注成功后要将本地的数据更改为true
+          this.detail.has_follow = true;
+
+          this.$toast.success(message);
+        }
+      });
+    },
+
+    // 点赞功能
+    handleLike() {
+      // if(this.detail.has_like){
+      //   this.$toast.success("你已经点过赞了哦~")
+      //   return
+      // }
+
+
+      const id = this.detail.id;
+      const config = {
+        url: "/post_like/" + id
+      };
+
+      if (localStorage.getItem("token")) {
+        config.headers = {
+          Authorization: localStorage.getItem("token")
+        };
+      }
+
+
+      // const id = this.detail.id;
+      this.$axios(config).then(res=>{
+        const {message} = res.data;
+
+        if(message === "点赞成功"){
+          // 更改本地中的has_like的值
+          this.detail.has_like = true;
+          this.detail.like_length++
+          this.$toast.success(message)
         }
 
-        if (localStorage.getItem("token")) {
-          config.headers = {
-            Authorization: localStorage.getItem("token")
-          };
+        if(message === "取消成功"){
+          // 更改本地中的has_like的值
+          this.detail.has_like = false;
+          this.detail.like_length--
+          this.$toast.success(message)
         }
-
-
-        this.$axios(config).then(res=>{
-
-          const {message} = res.data
-            
-          if(message === "已关注" || message === "关注成功"){
-              console.log(message);
-            // 关注成功后要将本地的数据更改为true
-              this.detail.has_follow = true
-
-              this.$toast.success(message)
-          }
-        })
+      })
+      
     }
   },
 
   mounted() {
     const { id } = this.$route.params;
 
-    this.$axios({
+    const config = {
       url: "/post/" + id
-    }).then(res => {
+    };
+
+    if (localStorage.getItem("token")) {
+      config.headers = {
+        Authorization: localStorage.getItem("token")
+      };
+    }
+
+    this.$axios(config).then(res => {
       const { data } = res.data;
       // 保存到详情
       this.detail = data;
@@ -174,8 +220,7 @@ export default {
       margin-bottom: 5px;
     }
     .post-nickname {
-      i,
-      span {
+      p {
         font-size: 14px;
         color: #666;
       }
@@ -216,6 +261,14 @@ export default {
       i {
         font-size: 16px;
       }
+    }
+
+    .like_active {
+      border: 1px  red solid;
+    }
+
+    .like_btn{
+      color: red;
     }
   }
 }
