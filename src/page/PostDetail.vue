@@ -9,9 +9,9 @@
       </div>
       <!-- 标题部分 -->
       <div class="header-content">
-        <h3>车主注意啦！啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦</h3>
+        <h3>{{detail.title}}</h3>
         <div>
-          <i>火星情报局</i>&nbsp;&nbsp;
+          <i>{{detail.user.nickname}}</i>&nbsp;&nbsp;
           <span>2019-9-29</span>
         </div>
       </div>
@@ -19,9 +19,7 @@
 
     <!-- 内容部分 -->
     <div class="post-content">
-      为营造临时泊位“干静、整洁、平安、有序”面貌迎国庆，
-      市交通部门拟在9月下旬对部分城市道路临时泊位进行清洁保养，
-      请市民群众配合在清洁保养期间将车辆驶离泊位。第一阶段临时泊位清洁保养计划（涉及17条路段）：
+      <div  v-html="detail.content"></div>
       <div class="post-btn">
         <div class="like">
           <i class="iconfont icondianzan"></i>
@@ -35,117 +33,118 @@
     </div>
 
     <!-- 导入PostFooter部分 -->
-    <PostFooter/>
+    <PostFooter />
   </div>
 </template>
 
 <script>
 // 导入底部评论栏目
-import PostFooter from '@/components/PostFooter'
+import PostFooter from "@/components/PostFooter";
 
 export default {
-  components:{
-    PostFooter,
+  components: {
+    PostFooter
   },
 
-  data(){
+  data() {
     return {
-
-    }
+      detail:{}
+    };
   },
 
-  // mounted(){
-
-  //   console.log(123);
-  //   const {id} = this.$route.params;
-
-  //   console.log(id);
-  //   this.$axios({
-  //     url:"/post/" + id,
-  //   }).then(res=>{
-  //       console.log(res);
-        
+  mounted() {
+    const { id } = this.$route.params;
+    
+    this.$axios({
+      url: "/post/" + id
+    }).then(res => {
+      const { data } = res.data;
+      // 保存到详情
+      this.detail = data;
+      console.log(this.detail);
       
-  //   })
-  // }
+    });
+    
+    
+  }
 };
 </script>
 
 <style lang="less" scoped>
+.header {
+  padding: 0 20px 10px;
 
-  .header {
-    padding: 0 20px 10px;
-    
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      // line-height: 36 / 360 * 100vw;
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // line-height: 36 / 360 * 100vw;
 
-      span {
-        font-size: 12px;
-      }
+    span {
+      font-size: 12px;
+    }
+    i {
+      display: block;
+      flex: 1;
+      padding-left: 10px;
+      font-size: 36px;
+    }
+
+    em {
+      // display: block;
+      width: 60 / 360 * 100vw;
+      height: 22 / 360 * 100vw;
+      line-height: 22 / 360 * 100vw;
+      text-align: center;
+      font-size: 12px;
+      border-radius: 50px;
+      border: 1px solid #ccc;
+    }
+  }
+
+  .header-content {
+    h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    i,
+    span {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+}
+
+.post-content {
+  font-size: 15px;
+  padding: 10px 20px;
+  line-height: 1.8;
+  /deep/ img {
+    max-width: 100%;
+  }
+
+  .post-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin:20px 0 80px 0;
+
+    .like,
+    .wechat {
+      display: block;
+      width: 70 / 360 * 100vw;
+      height: 25 / 360 * 100vw;
+      border: 1px solid #ccc;
+      text-align: center;
+      line-height: 25 / 360 * 100vw;
+      border-radius: 50px;
+
       i {
-        display: block;
-        flex: 1;
-        padding-left: 10px;
-        font-size: 36px;
-      }
-
-      em {  
-        // display: block;
-        width:60 / 360 * 100vw;
-        height: 22 / 360 * 100vw;
-        line-height: 22 / 360 * 100vw;
-        text-align: center;
-        font-size: 12px;
-        border-radius: 50px;
-        border: 1px solid #ccc;
-
-      }
-    }
-
-    .header-content {
-
-      h3 {
         font-size: 16px;
-        margin-bottom: 5px;
-      }
-
-      i,span {
-        font-size: 14px;
-        color: #666;
       }
     }
   }
-
-  .post-content {
-    font-size: 15px;
-    padding: 10px 20px;
-    line-height: 1.8;
-
-    .post-btn {
-      width:100%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-
-      .like,.wechat {
-        display: block;
-        width:70 / 360 * 100vw;
-        height: 25 / 360 * 100vw;
-        border: 1px solid #ccc;
-        text-align: center;
-        line-height: 25 / 360 * 100vw;
-        border-radius: 50px;
-
-        i {
-          font-size: 16px;
-        }
-      }
-
-    }
-  }
-
-  
+}
 </style>

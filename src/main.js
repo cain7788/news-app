@@ -55,7 +55,7 @@ const routes = [
     {path:'/user_follow',component:UserFollow},
     {path:'/user-comment',component:UserComment},
     {path:'/',component:Index},
-    {path:'/post_detail',component:PostDetail},
+    {path:'/post_detail/:id',component:PostDetail},
     
 ]
 

@@ -113,7 +113,6 @@ export default {
 
       // 保存栏目列表
       this.categorys = newData
-      console.log(this.categorys);
 
       // 先等栏目数据加载完成之后再请求加载文章数据。
       // 请求文章列表
