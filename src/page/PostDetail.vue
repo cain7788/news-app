@@ -38,7 +38,7 @@
     </div>
 
     <!-- 导入PostFooter部分 -->
-    <PostFooter :post="detail" />
+    <PostFooter :post="detail"  @handleStar="handleStar" />
   </div>
 </template>
 
@@ -150,7 +150,32 @@ export default {
         }
       })
       
-    }
+    },
+
+    // 收藏文章功能
+    handleStar(){
+      console.log(this.detail);
+      const id = this.detail.id
+      this.$axios({
+        url:"/post_star/" + id,
+        headers:{
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res=>{
+        const {message} = res.data;
+        
+        if(message === "收藏成功"){
+          this.detail.has_star = true;
+          this.$toast.success(message)
+        }
+
+        if(message === "取消成功"){
+          this.detail.has_star = false;
+          this.$toast.success(message)
+        }
+      })
+      
+    },
   },
 
   mounted() {

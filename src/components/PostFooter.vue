@@ -7,7 +7,7 @@
         <span class="iconfont iconpinglun-"></span>
       </div>
       <!-- 收藏按钮 -->
-      <i class="iconfont iconshoucang" @click="handleStar" :class="{star_active:post.has_star}"></i>
+      <i class="iconfont iconshoucang" @click="$emit('handleStar')" :class="{star_active:post.has_star}"></i>
       <em class="iconfont iconfenxiang"></em>
     </div>
   </div>
@@ -24,30 +24,8 @@ export default {
   },
 
   methods:{
-    handleStar(){
-      console.log(this.post);
-      const id = this.post.id
-      this.$axios({
-        url:"/post_star/" + id,
-        headers:{
-          Authorization: localStorage.getItem("token")
-        }
-      }).then(res=>{
-        const {message} = res.data;
-        
-        if(message === "收藏成功"){
-          this.post.has_star = true;
-          this.$toast.success(message)
-        }
-
-        if(message === "取消成功"){
-          this.post.has_star = false;
-          this.$toast.success(message)
-        }
-      })
-      
-    }
-  }
+    
+  },
 };
 </script>
 
