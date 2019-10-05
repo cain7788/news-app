@@ -31,13 +31,14 @@
         </div>
         <div class="wechat">
           <i class="iconfont iconweixin"></i>
-          <span>微信</span>
+          <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">微信</a>
+          <!-- <span>微信</span> -->
         </div>
       </div>
     </div>
 
     <!-- 导入PostFooter部分 -->
-    <PostFooter />
+    <PostFooter :post="detail" />
   </div>
 </template>
 
