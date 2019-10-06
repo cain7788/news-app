@@ -1,44 +1,80 @@
 <template>
   <div>
-    <div class="header">
-      <!-- 顶部导航 -->
-      <div class="header-top">
-        <span class="iconfont iconjiantou2" @click="$router.back()"></span>
-        <i class="iconfont icon-news"></i>
-        <em v-if="detail.has_follow" @click="handleUnfollow">已关注</em>
-        <em
-          v-if="!detail.has_follow"
-          :class="!detail.has_follow?'unfollow':''"
-          @click="handleFollow"
-        >关注</em>
+    <!-- 普通文章的渲染 -->
+    <div v-if="detail.type === 1">
+      <div class="header">
+        <!-- 顶部导航 -->
+        <div class="header-top">
+          <span class="iconfont iconjiantou2" @click="$router.back()"></span>
+          <i class="iconfont icon-news"></i>
+          <em v-if="detail.has_follow" @click="handleUnfollow">已关注</em>
+          <em
+            v-if="!detail.has_follow"
+            :class="!detail.has_follow?'unfollow':''"
+            @click="handleFollow"
+          >关注</em>
+        </div>
+        <!-- 标题部分 -->
+        <div class="header-content">
+          <h3>{{detail.title}}</h3>
+          <div class="post-nickname">
+            <p>{{detail.user.nickname}} 2019-9-29</p>
+          </div>
+        </div>
       </div>
-      <!-- 标题部分 -->
-      <div class="header-content">
-        <h3>{{detail.title}}</h3>
-        <div class="post-nickname">
-          <p>{{detail.user.nickname}}   2019-9-29</p>
+
+      <!-- 内容部分 -->
+      <div class="post-content">
+        <div v-html="detail.content"></div>
+        <div class="post-btn">
+          <div class="like" @click="handleLike" :class="{like_active:detail.has_like}">
+            <i class="iconfont icondianzan" :class="{like_btn:detail.has_like}"></i>
+            <span>{{detail.like_length}}</span>
+          </div>
+          <div class="wechat">
+            <i class="iconfont iconweixin"></i>
+            <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">微信</a>
+            <!-- <span>微信</span> -->
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 内容部分 -->
-    <div class="post-content">
-      <div v-html="detail.content"></div>
-      <div class="post-btn">
-        <div class="like" @click="handleLike" :class="{like_active:detail.has_like}">
+    <!-- 渲染视频文章页面 -->
+    <div class="video-wrap" v-if="detail.type === 2">
+      <video
+        src="https://video.pearvideo.com/mp4/adshort/20191005/cont-1609088-14451996_adpkg-ad_hd.mp4"
+        class="video"
+        controls
+        poster="https://image.pearvideo.com/cont/20191005/cont-1609088-12151293.png"
+      ></video>
+
+      <!-- 头像和关注功能 -->
+      <div class="video-info">
+        <div class="video-user">
+          <img :src="$axios.defaults.baseURL + detail.user.head_img" />
+          <span>{{detail.user.nickname}}</span>
+        </div>
+
+        <span class="focus" v-if="!detail.has_follow" @click="handleFollow">关注</span>
+        <span class="focus focus_active" v-else @click="handleUnfollow">已关注</span>
+      </div>
+
+      <!-- 点赞和分享功能 -->
+      <div class="video-btn">
+        <div class="video-like" @click="handleLike" :class="{like_active:detail.has_like}">
           <i class="iconfont icondianzan" :class="{like_btn:detail.has_like}"></i>
           <span>{{detail.like_length}}</span>
         </div>
-        <div class="wechat">
+        <div class="video-wechat">
           <i class="iconfont iconweixin"></i>
           <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">微信</a>
           <!-- <span>微信</span> -->
         </div>
       </div>
     </div>
-
     <!-- 导入PostFooter部分 -->
-    <PostFooter :post="detail"  @handleStar="handleStar" />
+    <PostFooter :post="detail" @handleStar="handleStar" />
   </div>
 </template>
 
@@ -54,7 +90,7 @@ export default {
   data() {
     return {
       detail: {
-        user:{}
+        user: {}
       }
     };
   },
@@ -118,7 +154,6 @@ export default {
       //   return
       // }
 
-
       const id = this.detail.id;
       const config = {
         url: "/post_like/" + id
@@ -130,52 +165,49 @@ export default {
         };
       }
 
-
       // const id = this.detail.id;
-      this.$axios(config).then(res=>{
-        const {message} = res.data;
+      this.$axios(config).then(res => {
+        const { message } = res.data;
 
-        if(message === "点赞成功"){
+        if (message === "点赞成功") {
           // 更改本地中的has_like的值
           this.detail.has_like = true;
-          this.detail.like_length++
-          this.$toast.success(message)
+          this.detail.like_length++;
+          this.$toast.success(message);
         }
 
-        if(message === "取消成功"){
+        if (message === "取消成功") {
           // 更改本地中的has_like的值
           this.detail.has_like = false;
-          this.detail.like_length--
-          this.$toast.success(message)
+          this.detail.like_length--;
+          this.$toast.success(message);
         }
-      })
-      
+      });
     },
 
     // 收藏文章功能
-    handleStar(){
+    handleStar() {
       console.log(this.detail);
-      const id = this.detail.id
+      const id = this.detail.id;
       this.$axios({
-        url:"/post_star/" + id,
-        headers:{
+        url: "/post_star/" + id,
+        headers: {
           Authorization: localStorage.getItem("token")
         }
-      }).then(res=>{
-        const {message} = res.data;
-        
-        if(message === "收藏成功"){
+      }).then(res => {
+        const { message } = res.data;
+
+        if (message === "收藏成功") {
           this.detail.has_star = true;
-          this.$toast.success(message)
+          this.$toast.success(message);
         }
 
-        if(message === "取消成功"){
+        if (message === "取消成功") {
           this.detail.has_star = false;
-          this.$toast.success(message)
+          this.$toast.success(message);
         }
-      })
-      
-    },
+      });
+    }
   },
 
   mounted() {
@@ -204,70 +236,97 @@ export default {
 <style lang="less" scoped>
 .header {
   padding: 0 20px 10px;
+}
+.header-top,
+.video-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // line-height: 36 / 360 * 100vw;
 
-  .header-top {
+  .video-user {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // line-height: 36 / 360 * 100vw;
-
-    span {
-      font-size: 12px;
-    }
-    i {
+    padding: 20px 10px;
+    img {
       display: block;
-      flex: 1;
-      padding-left: 10px;
-      font-size: 36px;
+      width: 40 / 360 * 100vw;
+      height: 40 / 360 * 100vw;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
-    em {
-      // display: block;
-      width: 60 / 360 * 100vw;
-      height: 22 / 360 * 100vw;
-      line-height: 22 / 360 * 100vw;
-      text-align: center;
-      font-size: 12px;
-      border-radius: 50px;
-      border: 1px solid #ccc;
-    }
-
-    // 未关注时的关注按钮样式
-    .unfollow {
-      background-color: rgb(248, 72, 72);
-      color: #fff;
-      border: none;
-    }
-  }
-
-  .header-content {
-    h3 {
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-    .post-nickname {
-      p {
-        font-size: 14px;
-        color: #666;
-      }
-    }
-    i,
     span {
+      margin-left: 10px;
       font-size: 14px;
       color: #666;
     }
   }
+
+
+  >span {
+    font-size: 12px;
+  }
+  i {
+    display: block;
+    flex: 1;
+    padding-left: 10px;
+    font-size: 36px;
+  }
+
+  em,.focus {
+    width: 60 / 360 * 100vw;
+    height: 22 / 360 * 100vw;
+    line-height: 22 / 360 * 100vw;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+  }
 }
 
-.post-content {
+// 未关注时的关注按钮样式
+.unfollow,
+.focus_active {
+  background-color: rgb(248, 72, 72);
+  color: #fff;
+  border: none;
+}
+
+.header-content {
+  .post-nickname {
+    p {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+  i,
+  span {
+    font-size: 14px;
+    color: #666;
+  }
+}
+
+.post-content,
+.video-wrap {
   font-size: 15px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   line-height: 1.8;
   /deep/ img {
     max-width: 100%;
   }
 
-  .post-btn {
+  
+  // 视频盒子大小
+  .video {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .post-btn,
+  .video-btn {
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -275,7 +334,9 @@ export default {
     margin: 20px 0 80px 0;
 
     .like,
-    .wechat {
+    .wechat,
+    .video-wechat,
+    .video-like {
       display: block;
       width: 70 / 360 * 100vw;
       height: 25 / 360 * 100vw;
@@ -283,6 +344,7 @@ export default {
       text-align: center;
       line-height: 25 / 360 * 100vw;
       border-radius: 50px;
+      
 
       i {
         font-size: 16px;
@@ -290,12 +352,13 @@ export default {
     }
 
     .like_active {
-      border: 1px  red solid;
+      border: 1px red solid;
     }
 
-    .like_btn{
+    .like_btn {
       color: red;
     }
   }
 }
+
 </style>
